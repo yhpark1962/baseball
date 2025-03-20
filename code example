@@ -1,0 +1,38 @@
+import random
+
+def generate_number():
+    """Generate a 3-digit number with unique digits."""
+    digits = random.sample(range(10), 3)
+    return ''.join(map(str, digits))
+
+def get_feedback(guess, secret):
+    """Return the number of strikes and balls."""
+    strikes = sum(1 for g, s in zip(guess, secret) if g == s)
+    balls = sum(1 for g in guess if g in secret) - strikes
+    return strikes, balls
+
+def main():
+    print("숫자 야구 게임에 오신 것을 환영합니다!")
+    secret_number = generate_number()
+    attempts = 0
+
+    while True:
+        guess = input("3자리 숫자를 입력하세요 (예: 123): ")
+
+        # 입력 유효성 검사
+        if len(guess) != 3 or not guess.isdigit() or len(set(guess)) != 3:
+            print("잘못된 입력입니다. 서로 다른 3자리 숫자를 입력하세요.")
+            continue
+
+        attempts += 1
+        strikes, balls = get_feedback(guess, secret_number)
+
+        if strikes == 3:
+            print(f"축하합니다! 숫자를 맞추셨습니다: {secret_number}")
+            print(f"총 시도 횟수: {attempts}")
+            break
+        else:
+            print(f"{strikes} 스트라이크, {balls} 볼")
+
+if __name__ == "__main__":
+    main()
